@@ -29,7 +29,7 @@ class LogEntryAdminMixin(object):
                 link = urlresolvers.reverse(viewname, args=[obj.actor.id])
             except NoReverseMatch:
                 return u'%s' % (obj.actor)
-            return format_html(u'<a href="{}">{}</a>', link, obj.actor)
+            return mark_safe('<a href="{}">{}</a>'.format(link, obj.actor))
 
         return 'system'
     user_url.short_description = 'User'
@@ -43,7 +43,7 @@ class LogEntryAdminMixin(object):
         except NoReverseMatch:
             return obj.object_repr
         else:
-            return format_html(u'<a href="{}">{}</a>', link, obj.object_repr)
+            return mark_safe('<a href="{}">{}</a>'.format(link, obj.object_repr))
     resource_url.short_description = 'Resource'
 
     def msg_short(self, obj):
@@ -65,7 +65,7 @@ class LogEntryAdminMixin(object):
         msg = '<table><tr><th>#</th><th>Field</th><th>From</th><th>To</th></tr>'
         for i, field in enumerate(sorted(changes), 1):
             value = [i, field] + (['***', '***'] if field == 'password' else changes[field])
-            msg += format_html('<tr><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>', *value)
+            msg += mark_safe('<tr><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>'.format(*value))
 
         msg += '</table>'
         return mark_safe(msg)
